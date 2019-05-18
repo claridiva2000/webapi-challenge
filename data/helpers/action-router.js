@@ -2,7 +2,6 @@ const express = require('express');
 
 //import db
 const Actions = require('./actionModel');
-const Projects = require('./project-router');
 //router
 const router = express.Router();
 
@@ -54,8 +53,21 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async(req, res) =>{
-  
-})
+//delete action
+router.delete('/:id', async (req, res) => {
+  try {
+    const count = await Actions.remove(req.params.id);
+    if (count > 0) {
+      res.status(200).json({ message: 'Action is delete' });
+    } else {
+      res.status(400).json({ message: 'The action could not be found' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Error removing Action'
+    });
+  }
+});
 
 module.exports = router;
