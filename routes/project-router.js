@@ -1,7 +1,7 @@
 const express = require('express');
 
-const Projects = require('./projectModel');
-const Actions = require('./actionModel');
+const Projects = require('../data/helpers/projectModel');
+// const Actions = require('./actionModel');
 
 const router = express.Router();
 
@@ -13,8 +13,8 @@ router.use((req, res, next) => {
 //get projects
 router.get('/', async (req, res) => {
   try {
-    const projects = await Projects.get(req.body);
-    res.status(200).json(projects);
+    const allprojects = await Projects.get();
+    res.status(200).json({message: allprojects});
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const project = await Projects.insert(req.body);
-    res.status(201).json(project);
+    res.status(201).json({message:project});
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -37,11 +37,11 @@ router.post('/', async (req, res) => {
 });
 
 //update project
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const project = await Projects.update(req.params.id, req.body);
-    if (project) {
-      res.status(200).json(project);
+    const updateproject = await Projects.update(req.params.id, req.body);
+    if (updateproject) {
+      res.status(200).json({message: updateproject});
     } else {
       res.status(404).json({ message: 'Project could not be found' });
     }
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
 });
 
 //remove project
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const count = await Projects.remove(req.params.id);
     if (count > 0) {
@@ -73,10 +73,11 @@ router.delete('/:id', async (req, res) => {
 });
 
 //get project actions
-router.get('/:id/actions', async (req, res) => {
+router.get("/:id/actions", async (req, res) => {
+  const id = req.params.id;
   try {
-    const actions = await Projects.getProjectActions(req.params.id);
-    res.status(200).json(actions);
+    const projectactions = await Projects.getProjectActions(id);
+    res.status(200).json({message: projectactions});
   } catch (err) {
     console.log(err);
     res.status(500).json({

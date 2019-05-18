@@ -1,8 +1,8 @@
 const express = require('express');
 
 //router imports
-projectRouter = require('./data/helpers/project-router');
-actionRouter = require('./data/helpers/action-router');
+const projectRouter = require('./routes/project-router');
+const actionRouter = require('./routes/action-router');
 
 //server
 const server = express();
